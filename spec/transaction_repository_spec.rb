@@ -70,6 +70,16 @@ RSpec.describe TransactionRepository do
       expect(@tr.find_by_id(4986).credit_card_expiration_date).to eq("0220")
     end
 
+    it 'updates credit card number, expiration, result and updated at time' do
+      original_time = @tr.find_by_id(4985).updated_at
+      attributes = {credit_card_number: "4040404040404040", credit_card_expiration_date: "0522", result: 'failed'}
+      @tr.update(4985, attributes)
+      expect(@tr.find_by_id(4985).updated_at).to be > original_time
+      expect(@tr.find_by_id(4985).credit_card_number).to eq("4040404040404040")
+      expect(@tr.find_by_id(4985).credit_card_expiration_date).to eq("0522")
+      expect(@tr.find_by_id(4985).result).to eq("failed")
+    end
+
   end
 
 end
