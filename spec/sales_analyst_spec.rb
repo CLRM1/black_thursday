@@ -1,7 +1,3 @@
-require_relative '../lib/item'
-require_relative '../lib/merchant'
-require_relative '../lib/merchant_repository'
-require_relative '../lib/item_repository'
 require_relative '../lib/sales_engine'
 require_relative '../lib/sales_analyst'
 require 'CSV'
@@ -12,10 +8,13 @@ RSpec.describe SalesAnalyst do
 
   before(:each) do
     @sales_engine = SalesEngine.from_csv({
-          :items     => "./data/items.csv",
-          :merchants => "./data/merchants.csv",
-          :invoices => "./data/invoices.csv"
-          })
+            :items     => "./data/items.csv",
+            :merchants => "./data/merchants.csv",
+            :invoices => "./data/invoices.csv",
+            :customers => "./data/customers.csv",
+            :transactions => "./data/transactions.csv",
+            :invoice_items => "./data/invoice_items.csv"
+            })
     @sales_analyst = @sales_engine.analyst
   end
 

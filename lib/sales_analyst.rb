@@ -5,6 +5,12 @@ require_relative '../lib/item_repository'
 require_relative '../lib/sales_engine'
 require_relative '../lib/invoice'
 require_relative '../lib/invoice_repository'
+require_relative '../lib/customer'
+require_relative '../lib/customer_repository'
+require_relative '../lib/transaction'
+require_relative '../lib/transaction_repository'
+require_relative '../lib/invoice_item'
+require_relative '../lib/invoice_item_repository'
 
 require 'bigdecimal'
 require 'pry'
@@ -12,10 +18,13 @@ require 'CSV'
 
 class SalesAnalyst
 
-  def initialize(merchants, items, invoices)
+  def initialize(merchants, items, invoices, customers, transactions, invoice_items)
     @merchants = merchants
     @items = items
     @invoices = invoices
+    @customers = customers
+    @transactions = transactions
+    @invoice_items = invoice_items
   end
 
   def average_items_per_merchant
