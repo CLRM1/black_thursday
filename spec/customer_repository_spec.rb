@@ -71,4 +71,17 @@ RSpec.describe CustomerRepository do
     end
   end
 
+  describe '#update' do
+    it 'can update some customer with new attributes given an id' do
+      attributes = {first_name: "James", last_name: "Harkins"}
+
+      expect(@cr.find_by_id(1).first_name).to eq("Joey")
+      expect(@cr.find_by_id(1).first_name).to eq("Ondricka")
+
+      @cr.update(1, attributes)
+
+      expect(@cr.find_by_id(1).first_name).to eq("James")
+      expect(@cr.find_by_id(1).first_name).to eq("Harkins")
+    end
+  end
 end
