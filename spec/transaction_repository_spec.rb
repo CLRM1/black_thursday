@@ -80,6 +80,20 @@ RSpec.describe TransactionRepository do
       expect(@tr.find_by_id(4985).result).to eq("failed")
     end
 
+    it 'can delete invoice item by id' do
+      t = {
+        :invoice_id => 8,
+        :credit_card_number => "4242424242424242",
+        :credit_card_expiration_date => "0220",
+        :result => "success",
+        :created_at => Time.now,
+        :updated_at => Time.now
+      }
+      @tr.create(t)
+      @tr.delete(4986)
+      expect(@tr.find_by_id(4986)).to eq(nil)
+    end
+
   end
 
 end
