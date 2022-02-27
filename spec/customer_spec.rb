@@ -1,5 +1,4 @@
 require_relative '../lib/customer'
-require 'bigdecimal'
 require 'simplecov'
 SimpleCov.start
 
