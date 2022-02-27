@@ -22,4 +22,8 @@ class CustomerRepository
     rows.map {|row| Customer.new(row)}
   end
 
+  def find_by_id(id)
+    @customers.find {|customer| customer.id == id}
+  end
+
 end
