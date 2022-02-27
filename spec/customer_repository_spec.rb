@@ -13,6 +13,11 @@ RSpec.describe CustomerRepository do
     it 'is initialized with a filename' do
       expect(@cr.filename).to eq('./data/customers.csv')
     end
+
+    it 'is initialized with an array of customer objects' do
+      expect(@cr.customers).to be_a(Array)
+      expect(@cr.customers[0]).to be_a(Customer)
+    end
   end
 
   describe '#rows' do
@@ -25,6 +30,13 @@ RSpec.describe CustomerRepository do
     it 'can read the CSV::Table object from Rows and create a customer object for each line' do
       expect(@cr.all).to be_a(Array)
       expect(@cr.all[0]).to be_a(Customer)
+    end
+  end
+
+  describe '#find_by_id' do
+    it 'can find a customer by its ID' do
+      expect(@cr.find_by_id(1)).to be_a(Customer)
+      expect(@cr.find_by_id(1).first_name).to eq("Joey")
     end
   end
 
