@@ -6,7 +6,6 @@ require_relative '../lib/sales_engine'
 require_relative '../lib/invoice'
 require_relative '../lib/invoice_repository'
 
-require 'date'
 require 'bigdecimal'
 require 'pry'
 require 'CSV'
@@ -214,5 +213,6 @@ class SalesAnalyst
     ((invoices_by_status.count.to_f / @invoices.invoices.count) * 100).round(2)
     # to save
   end
+
 
 end
