@@ -58,4 +58,9 @@ class TransactionRepository
     end
   end
 
+  def delete(id)
+    deleted_transaction = find_by_id(id)
+    @transactions.delete(deleted_transaction)
+  end
+
 end
