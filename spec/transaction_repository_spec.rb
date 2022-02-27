@@ -52,6 +52,10 @@ RSpec.describe TransactionRepository do
       expect(@tr.find_all_by_result('success')[0].id).to eq(1)
     end
 
+    it 'finds the current highest id' do
+      expect(@tr.current_highest_id).to eq(4985)
+    end
+
   end
 
 end
