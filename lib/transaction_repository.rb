@@ -49,4 +49,13 @@ class TransactionRepository
     new_transaction
   end
 
+  def update(id, attributes)
+    if updated_transaction = find_by_id(id)
+      updated_transaction.credit_card_number = attributes[:credit_card_number]
+      updated_transaction.credit_card_expiration_date = attributes[:credit_card_expiration_date]
+      updated_transaction.result = attributes[:result]
+      updated_transaction.updated_at = Time.now
+    end
+  end
+
 end
