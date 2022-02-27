@@ -63,7 +63,12 @@ RSpec.describe CustomerRepository do
   end
 
   describe '#create' do
-    xit 'can create a new customer with a set of attributes and an id 1 higher than the current highest' do
+    it 'can create a new customer with a set of attributes and an id 1 higher than the current highest' do
+      attributes = {first_name: "James", last_name: "Harkins"}
+
+      expect(@cr.create(attributes).id).to eq(1001)
+      expect(@cr.find_by_id(1001).first_name).to eq(attributes[:first_name])
+
     end
   end
 
