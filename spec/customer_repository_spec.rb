@@ -90,7 +90,7 @@ RSpec.describe CustomerRepository do
 
       @cr.delete(1)
 
-      expect(@cr.find_by_id).to eq(nil)
+      expect(@cr.find_by_id(1)).to eq(nil)
     end
   end
 end
