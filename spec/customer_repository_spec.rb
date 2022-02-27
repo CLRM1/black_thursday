@@ -40,4 +40,13 @@ RSpec.describe CustomerRepository do
     end
   end
 
+  describe '#find_all_by_first_name' do
+    it 'can find all customers with the same first name' do
+      expect(@cr.find_all_by_first_name("Parker").count).to eq(2)
+      expect(@cr.find_all_by_first_name("Parker")[0]).to be_a(Customer)
+    end
+  end
+
+
+
 end
