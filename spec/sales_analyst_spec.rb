@@ -100,7 +100,7 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.invoice_status(:shipped)).to eq(56.95)
       expect(@sales_analyst.invoice_status(:returned)).to eq(13.5)
     end
-
+ # to_save
   end
 
 end
