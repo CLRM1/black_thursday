@@ -21,5 +21,9 @@ class TransactionRepository
     rows.map {|row| Transaction.new(row)}
   end
 
+  def find_by_id(id)
+    @transactions.find {|transaction| transaction.id == id}
+  end
+
 
 end
