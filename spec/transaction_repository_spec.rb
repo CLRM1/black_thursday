@@ -33,6 +33,11 @@ RSpec.describe TransactionRepository do
       expect(@tr.all[0]).to be_a(Transaction)
     end
 
+    it 'find invoice item by id' do
+      expect(@tr.find_by_id(2)).to be_a(Transaction)
+      expect(@tr.find_by_id(10).id).to eq(10)
+    end
+
   end
 
 end
