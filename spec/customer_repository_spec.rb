@@ -84,4 +84,13 @@ RSpec.describe CustomerRepository do
       expect(@cr.find_by_id(1).last_name).to eq("Harkins")
     end
   end
+
+  describe '#delete' do
+    it 'can delete a customer object given its id' do
+
+      @cr.delete(1)
+
+      expect(@cr.find_by_id).to eq(nil)
+    end
+  end
 end
