@@ -22,6 +22,11 @@ class CustomerRepository
     rows.map {|row| Customer.new(row)}
   end
 
+  def current_highest_id
+    sorted = @customers.sort_by {|customer| customer.id}
+    highest_id = sorted[-1].id
+  end
+
   def find_by_id(id)
     @customers.find {|customer| customer.id == id}
   end

@@ -33,6 +33,14 @@ RSpec.describe CustomerRepository do
     end
   end
 
+  describe '#current_highest_id' do
+    it 'can find the current highest id' do
+      expect(@cr.current_highest_id).to be_a(Integer)
+      expect(@cr.current_highest_id).to eq(1000)
+    end
+  end
+
+
   describe '#find_by_id' do
     it 'can find a customer by its ID' do
       expect(@cr.find_by_id(1)).to be_a(Customer)
@@ -54,6 +62,9 @@ RSpec.describe CustomerRepository do
     end
   end
 
-
+  describe '#create' do
+    xit 'can create a new customer with a set of attributes and an id 1 higher than the current highest' do
+    end
+  end
 
 end
