@@ -37,5 +37,10 @@ class TransactionRepository
     @transactions.find_all {|transaction| transaction.result == result}
   end
 
+  def current_highest_id
+    sorted = @transactions.sort_by {|transaction| transaction.id}
+    highest_id = sorted[-1].id
+  end
+
 
 end
