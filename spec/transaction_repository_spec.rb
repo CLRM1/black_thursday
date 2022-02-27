@@ -47,6 +47,11 @@ RSpec.describe TransactionRepository do
       expect(@tr.find_all_by_credit_card_number("4177816490204479")[0].id).to eq(2)
     end
 
+    it 'find all by result' do
+      expect(@tr.find_all_by_result('success')[0]).to be_a(Transaction)
+      expect(@tr.find_all_by_result('success')[0].id).to eq(1)
+    end
+
   end
 
 end
