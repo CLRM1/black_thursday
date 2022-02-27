@@ -24,6 +24,10 @@ RSpec.describe TransactionRepository do
       expect(@tr).to be_a(TransactionRepository)
     end
 
+    it 'creates rows of CSV::Table object' do
+      expect(@tr.rows).to be_a(CSV::Table)
+    end
+
   end
 
 end
