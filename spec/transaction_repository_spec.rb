@@ -29,7 +29,7 @@ RSpec.describe TransactionRepository do
     end
 
     it 'returns all instances of invoice items' do
-      expect(@tr.all.count).to eq(5000)
+      expect(@tr.all.count).to eq(4985)
       expect(@tr.all[0]).to be_a(Transaction)
     end
 
