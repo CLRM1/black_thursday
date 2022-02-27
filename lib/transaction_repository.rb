@@ -42,5 +42,11 @@ class TransactionRepository
     highest_id = sorted[-1].id
   end
 
+  def create(attributes)
+    new_id = current_highest_id + 1
+    attributes[:id] = new_id
+    @transactions << new_transaction = Transaction.new(attributes)
+    new_transaction
+  end
 
 end
