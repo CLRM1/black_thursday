@@ -44,4 +44,14 @@ class CustomerRepository
     @customers << new_customer = Customer.new(attributes)
     return new_customer
   end
+
+  def update(id, attributes)
+    if updated_customer = find_by_id(id)
+      updated_customer.first_name = attributes[:first_name]
+      updated_customer.last_name = attributes[:last_name]
+      updated_customer.updated_at = Time.now
+      updated_customer
+    end
+  end
+  
 end
