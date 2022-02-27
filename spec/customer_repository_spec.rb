@@ -68,7 +68,6 @@ RSpec.describe CustomerRepository do
 
       expect(@cr.create(attributes).id).to eq(1001)
       expect(@cr.find_by_id(1001).first_name).to eq(attributes[:first_name])
-
     end
   end
 

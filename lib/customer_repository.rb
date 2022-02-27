@@ -39,4 +39,9 @@ class CustomerRepository
     @customers.find_all {|customer| customer.last_name == last_name}
   end
 
+  def create(attributes)
+    attributes[:id] = current_highest_id + 1
+    @customers << new_customer = Customer.new(attributes)
+    return new_customer
+  end
 end
