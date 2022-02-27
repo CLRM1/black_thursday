@@ -33,5 +33,9 @@ class TransactionRepository
     @transactions.find_all {|transaction| transaction.credit_card_number == credit_card_number}
   end
 
+  def find_all_by_result(result)
+    @transactions.find_all {|transaction| transaction.result == result}
+  end
+
 
 end
