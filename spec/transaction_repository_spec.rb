@@ -28,6 +28,11 @@ RSpec.describe TransactionRepository do
       expect(@tr.rows).to be_a(CSV::Table)
     end
 
+    it 'returns all instances of invoice items' do
+      expect(@tr.all.count).to eq(5000)
+      expect(@tr.all[0]).to be_a(Transaction)
+    end
+
   end
 
 end
