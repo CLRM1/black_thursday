@@ -56,6 +56,20 @@ RSpec.describe TransactionRepository do
       expect(@tr.current_highest_id).to eq(4985)
     end
 
+    it 'create new transaction' do
+      t = {
+        :invoice_id => 8,
+        :credit_card_number => "4242424242424242",
+        :credit_card_expiration_date => "0220",
+        :result => "success",
+        :created_at => Time.now,
+        :updated_at => Time.now
+      }
+      @tr.create(t)
+      expect(@tr.find_by_id(4986)).to be_a(Transaction)
+      expect(@tr.find_by_id(4986).credit_card_expiration_date).to eq("0220")
+    end
+
   end
 
 end
