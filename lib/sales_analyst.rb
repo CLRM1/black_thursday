@@ -211,8 +211,5 @@ class SalesAnalyst
       invoice.status == status
     end
     ((invoices_by_status.count.to_f / @invoices.invoices.count) * 100).round(2)
-    # to save
   end
-
-
 end

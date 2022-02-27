@@ -58,4 +58,8 @@ class InvoiceItemRepository
     @invoice_items.delete(deleted_invoice)
   end
 
+  def inspect
+   "#<#{self.class} #{@merchants.size} rows>"
+  end
+
 end

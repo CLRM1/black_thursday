@@ -1,4 +1,6 @@
 require_relative '../lib/merchant'
+require 'simplecov'
+SimpleCov.start
 
 RSpec.describe Merchant do
   describe "Iteration 1" do
