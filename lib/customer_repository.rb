@@ -12,5 +12,14 @@ class CustomerRepository
     @filename = filename
     @customers = self.all
   end
-  
+
+  def rows
+    CSV.read(@filename, headers: true, header_converters: :symbol)
+  end
+
+
+  def all
+    rows.map {|row| Customer.new(row)}
+  end
+
 end
