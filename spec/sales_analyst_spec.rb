@@ -101,7 +101,19 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.invoice_status(:shipped)).to eq(56.95)
       expect(@sales_analyst.invoice_status(:returned)).to eq(13.5)
     end
- # to_save
+  end
+
+  describe 'Iteration 3: more business intelligence' do
+    it 'can determine if an invoice is paid in full' do
+      expect(@sales_analyst.invoice_paid_in_full?(1)).to eq(true)
+      expect(@sales_analyst.invoice_paid_in_full?(200)).to eq(true)
+      expect(@sales_analyst.invoice_paid_in_full?(204)).to eq(false)
+    end
+
+    it 'can determine the total dollar amount for an invoice for all non-failed transactions' do
+      expect(@sales_analyst.invoice_total(1)).to eq 21067.77
+      expect(@sales_analyst.invoice_total(1).class).to eq BigDecimal
+    end
   end
 
 
