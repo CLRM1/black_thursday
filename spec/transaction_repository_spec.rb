@@ -39,7 +39,8 @@ RSpec.describe TransactionRepository do
     end
 
     it 'find all by invoice id' do
-      expect(@tr.find_all_by_invoice_id(5)[0]).to be_a(Transaction)
+      expect(@tr.find_all_by_invoice_id(2179)[0]).to be_a(Transaction)
+      expect(@tr.find_all_by_invoice_id(2179).count).to eq(2)
     end
 
     it 'find all by credit card number' do

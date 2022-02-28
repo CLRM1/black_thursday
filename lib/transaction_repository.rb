@@ -25,8 +25,8 @@ class TransactionRepository
     @transactions.find {|transaction| transaction.id == id}
   end
 
-  def find_all_by_invoice_id(id)
-    @transactions.find_all {|transaction| transaction.id == id}
+  def find_all_by_invoice_id(invoice_id)
+    @transactions.find_all {|transaction| transaction.invoice_id == invoice_id}
   end
 
   def find_all_by_credit_card_number(credit_card_number)
@@ -34,7 +34,7 @@ class TransactionRepository
   end
 
   def find_all_by_result(result)
-    @transactions.find_all {|transaction| transaction.result == result}
+    @transactions.find_all {|transaction| transaction.result == result.to_sym}
   end
 
   def current_highest_id
@@ -51,9 +51,9 @@ class TransactionRepository
 
   def update(id, attributes)
     if updated_transaction = find_by_id(id)
-      updated_transaction.credit_card_number = attributes[:credit_card_number]
-      updated_transaction.credit_card_expiration_date = attributes[:credit_card_expiration_date]
-      updated_transaction.result = attributes[:result]
+      updated_transaction.credit_card_number = attributes[:credit_card_number] if attributes[:credit_card_number]
+      updated_transaction.credit_card_expiration_date = attributes[:credit_card_expiration_date] if attributes[:credit_card_expiration_date]
+      updated_transaction.result = attributes[:result] if attributes[:result]
       updated_transaction.updated_at = Time.now
     end
   end

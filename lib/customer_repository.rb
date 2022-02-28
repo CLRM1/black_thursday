@@ -31,24 +31,26 @@ class CustomerRepository
     @customers.find {|customer| customer.id == id}
   end
 
-  def find_all_by_first_name(first_name)
-    @customers.find_all {|customer| customer.first_name == first_name}
+  def find_all_by_first_name(fragment)
+    @customers.find_all {|customer| customer.first_name.downcase.include?(fragment.downcase)}
   end
 
-  def find_all_by_last_name(last_name)
-    @customers.find_all {|customer| customer.last_name == last_name}
+  def find_all_by_last_name(fragment)
+    @customers.find_all {|customer| customer.last_name.downcase.include?(fragment.downcase)}
   end
 
   def create(attributes)
     attributes[:id] = current_highest_id + 1
+    attributes[:created_at] = Time.now
+    attributes[:updated_at] = Time.now
     @customers << new_customer = Customer.new(attributes)
     return new_customer
   end
 
   def update(id, attributes)
     if updated_customer = find_by_id(id)
-      updated_customer.first_name = attributes[:first_name]
-      updated_customer.last_name = attributes[:last_name]
+      updated_customer.first_name = attributes[:first_name] if attributes[:first_name]
+      updated_customer.last_name = attributes[:last_name] if attributes[:last_name]
       updated_customer.updated_at = Time.now
       updated_customer
     end
