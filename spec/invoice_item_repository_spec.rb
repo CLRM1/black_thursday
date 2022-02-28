@@ -37,11 +37,13 @@ RSpec.describe InvoiceItemRepository do
     end
 
     it 'find all by item id' do
-      expect(@ii_repository.find_all_by_item_id(3)[0]).to be_a(InvoiceItem)
+      expect(@ii_repository.find_all_by_item_id(263408101)[0]).to be_a(InvoiceItem)
+      expect(@ii_repository.find_all_by_item_id(263408101).count).to eq(11)
     end
 
     it 'find all invoice by invoice id' do
-      expect(@ii_repository.find_all_by_invoice_id(10)[0]).to be_a(InvoiceItem)
+      expect(@ii_repository.find_all_by_invoice_id(100)[0]).to be_a(InvoiceItem)
+      expect(@ii_repository.find_all_by_invoice_id(100).count).to eq(3)
     end
 
     it 'finds the current highest id' do

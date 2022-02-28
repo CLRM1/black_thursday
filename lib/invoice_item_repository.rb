@@ -25,12 +25,12 @@ class InvoiceItemRepository
     @invoice_items.find {|invoice_item| invoice_item.id == id}
   end
 
-  def find_all_by_item_id(id)
-    @invoice_items.find_all {|invoice_item| invoice_item.id == id}
+  def find_all_by_item_id(item_id)
+    @invoice_items.find_all {|invoice_item| invoice_item.item_id == item_id}
   end
 
-  def find_all_by_invoice_id(id)
-    @invoice_items.find_all {|invoice_item| invoice_item.id == id}
+  def find_all_by_invoice_id(invoice_id)
+    @invoice_items.find_all {|invoice_item| invoice_item.invoice_id == invoice_id}
   end
 
   def current_highest_id
@@ -56,6 +56,10 @@ class InvoiceItemRepository
   def delete(id)
     deleted_invoice = find_by_id(id)
     @invoice_items.delete(deleted_invoice)
+  end
+
+  def inspect
+   "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end

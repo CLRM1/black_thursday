@@ -1,7 +1,3 @@
-require_relative '../lib/item'
-require_relative '../lib/merchant'
-require_relative '../lib/merchant_repository'
-require_relative '../lib/item_repository'
 require_relative '../lib/sales_engine'
 require_relative '../lib/sales_analyst'
 require 'CSV'
@@ -12,10 +8,13 @@ RSpec.describe SalesAnalyst do
 
   before(:each) do
     @sales_engine = SalesEngine.from_csv({
-          :items     => "./data/items.csv",
-          :merchants => "./data/merchants.csv",
-          :invoices => "./data/invoices.csv"
-          })
+            :items     => "./data/items.csv",
+            :merchants => "./data/merchants.csv",
+            :invoices => "./data/invoices.csv",
+            :customers => "./data/customers.csv",
+            :transactions => "./data/transactions.csv",
+            :invoice_items => "./data/invoice_items.csv"
+            })
     @sales_analyst = @sales_engine.analyst
   end
 
@@ -102,7 +101,19 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.invoice_status(:shipped)).to eq(56.95)
       expect(@sales_analyst.invoice_status(:returned)).to eq(13.5)
     end
- # to_save
+  end
+
+  describe 'Iteration 3: more business intelligence' do
+    it 'can determine if an invoice is paid in full' do
+      expect(@sales_analyst.invoice_paid_in_full?(1)).to eq(true)
+      expect(@sales_analyst.invoice_paid_in_full?(200)).to eq(true)
+      expect(@sales_analyst.invoice_paid_in_full?(204)).to eq(false)
+    end
+
+    it 'can determine the total dollar amount for an invoice for all non-failed transactions' do
+      expect(@sales_analyst.invoice_total(1)).to eq 21067.77
+      expect(@sales_analyst.invoice_total(1).class).to eq BigDecimal
+    end
   end
 
 
