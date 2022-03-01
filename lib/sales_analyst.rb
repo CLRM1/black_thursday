@@ -249,6 +249,11 @@ class SalesAnalyst
     end
   end
 
+
+  def invoice_ids_by_date(date)
+    invoices_by_date(date).map { |invoice| invoice.id }
+  end
+
   def total_revenue_by_date(date)
     successful_transactions_by_date(Time.parse(date))
 
