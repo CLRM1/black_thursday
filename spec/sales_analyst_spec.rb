@@ -117,9 +117,15 @@ RSpec.describe SalesAnalyst do
   end
 
   describe 'Iteration 4: Merchant Analytics' do
+    it 'can determine if invoices have unique created dates' do
+      n = @sales_analyst.invoices.invoices.count
+      b = @sales_analyst.invoices.invoices.map do |invoice|
+        invoice.created_at
+        end
+      expect(n).to eq(b.count)
+    end
 
-
-    it 'can determinal total revenue by date' do
+    xit 'can determinal total revenue by date' do
       time = Time.parse("2012-03-27")
       expect(@sales_analyst.total_revenue_by_date(time).class).to be_a(BigDecimal)
     end
