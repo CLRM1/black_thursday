@@ -253,6 +253,15 @@ class SalesAnalyst
     total
   end
 
+  def top_revenue_earners(amount_of_merchants)
+    merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
+    n = merchant_ids.map do |merchant_id|
+      @invoices.find_all_by_merchant_id(merchant_id)
+    end
+
+  require "pry"; binding.pry
+  end
+
 
 
 end

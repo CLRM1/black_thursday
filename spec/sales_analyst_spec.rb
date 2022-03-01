@@ -131,7 +131,7 @@ RSpec.describe SalesAnalyst do
     end
 
     it 'can determine top revenue earners' do
-      expect(@sales_analyst.top_revenue_earners().first).to eq(Merchant)
+      expect(@sales_analyst.top_revenue_earners(1).first).to eq(Merchant)
 
     end
 
