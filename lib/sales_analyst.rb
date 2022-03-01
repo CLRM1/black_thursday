@@ -263,7 +263,7 @@ class SalesAnalyst
 
   end
 
-  def top_revenue_earners(amount_of_merchants = 19)
+  def top_revenue_earners(amount_of_merchants = 20)
     merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
     invoices_by_merchant_id = merchant_ids.map do |merchant_id|
       @invoices.find_all_by_merchant_id(merchant_id)
@@ -276,8 +276,8 @@ class SalesAnalyst
     end
     sorted = merchant_revenues.sort_by { |key, value| value }.reverse
     sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
-    sorted_merchants[0..amount_of_merchants]
-
+    sorted_merchants[0..(amount_of_merchants - 1)]
+    require "pry"; binding.pry
   end
 
 
