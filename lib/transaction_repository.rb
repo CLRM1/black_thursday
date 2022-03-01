@@ -69,6 +69,7 @@ class TransactionRepository
         transaction.invoice_id
       end
     end.compact
+    
 
   end
 
