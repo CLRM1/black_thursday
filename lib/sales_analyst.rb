@@ -242,29 +242,31 @@ class SalesAnalyst
     total
   end
 
-  def invoices_by_date(date)
-    time_date = Time.parse(date)
-    date_invoices = @invoices.invoices.find_all do |transaction|
-      transaction.created_at.strftime("%d/%m/%Y") == time_date.strftime("%d/%m/%Y")
-    end
-  end
-
-  def invoice_ids_by_date(date)
-    invoices_by_date(date).map { |invoice| invoice.id }
-  end
-
-  def invoice_items_by_date(date)
-    invoice_ids_by_date(date).flat_map do |id|
-      @invoice_items.find_all_by_invoice_id(id)
-    end
-  end
-
-  def total_revenue_by_date(date)
-    successful_transactions_by_date(Time.parse(date))
-
-
-
-
-  end
+  # def invoices_by_date(date)
+  #
+  #   date_invoices = @invoices.invoices.find_all do |transaction|
+  #     transaction.updated_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
+  #   end
+  # end
+  #
+  # def invoice_ids_by_date(date)
+  #   invoices_by_date(date).map { |invoice| invoice.id }
+  # end
+  #
+  # def invoice_items_by_date(date)
+  #   invoice_ids_by_date(date).flat_map do |id|
+  #     @invoice_items.find_all_by_invoice_id(id)
+  #   end
+  # end
+  #
+  # def total_revenue_by_date(date)
+  #
+  #   n = invoice_items_by_date(date).map do |invoice|
+  #     # require "pry"; binding.pry
+  #     invoice.unit_price * invoice.quantity
+  #   end
+  #
+  #   n.sum
+  # end
 
 end
