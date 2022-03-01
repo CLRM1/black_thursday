@@ -125,9 +125,14 @@ RSpec.describe SalesAnalyst do
       expect(n).to eq(b.count)
     end
 
-    it 'can determinal total revenue by date' do
+    it 'can determine total revenue by date' do
       time = Time.parse("2009-02-07")
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
+    end
+
+    it 'can determine top revenue earners' do
+      expect(@sales_analyst.top_revenue_earners().first).to eq(Merchant)
+
     end
 
 
