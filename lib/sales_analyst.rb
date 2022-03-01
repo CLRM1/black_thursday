@@ -255,9 +255,17 @@ class SalesAnalyst
 
   def revenue_by_invoice_id(invoice_id)
     total = 0
+    accumulator = []
     @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-      total += (invoice_item.unit_price * invoice_item.quantity)
+
+      if @transactions.find_all_by_invoice_id(invoice_id).each{|transaction| accumulator << transaction if transaction.result == :success }
+
+
+        total += (invoice_item.unit_price * invoice_item.quantity)
+      end
     end
+
+    require "pry"; binding.pry
     total
 
 
@@ -276,8 +284,8 @@ class SalesAnalyst
     end
     sorted = merchant_revenues.sort_by { |key, value| value }.reverse
     sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
-    sorted_merchants[0..(amount_of_merchants - 1)]
-    require "pry"; binding.pry
+    n = sorted_merchants[0..(amount_of_merchants - 1)]
+
   end
 
 
