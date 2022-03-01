@@ -63,6 +63,15 @@ class TransactionRepository
     @transactions.delete(deleted_transaction)
   end
 
+  def all_successful_transactions
+    @transactions.map do |transaction|
+      if transaction.result == :success
+        transaction.invoice_id
+      end
+    end.compact
+
+  end
+
   def inspect
    "#<#{self.class} #{@merchants.size} rows>"
   end
