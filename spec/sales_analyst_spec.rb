@@ -120,7 +120,7 @@ RSpec.describe SalesAnalyst do
 
 
     it 'can determinal total revenue by date' do
-      time = Time.parse("2012-02-26")
+      time = Time.parse("2012-03-27")
       expect(@sales_analyst.total_revenue_by_date(time).class).to be_a(BigDecimal)
     end
 

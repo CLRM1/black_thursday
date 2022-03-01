@@ -242,6 +242,16 @@ class SalesAnalyst
     total
   end
 
+  def total_revenue_by_date(date)
+    invoice_items_by_date = @invoice_items.invoice_items.find_all do |invoice_item|
+
+      invoice_item.created_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
+    end
+            require "pry"; binding.pry
+
+
+  end
+
   # def invoices_by_date(date)
   #
   #   date_invoices = @invoices.invoices.find_all do |transaction|

@@ -76,6 +76,12 @@ class InvoiceRepository
     @invoices.delete(deleted_invoice)
   end
 
+  def find_by_created_at(date)
+    @invoices.find_all do |invoice|
+      invoice.created_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
+    end 
+  end
+
   def inspect
    "#<#{self.class} #{@merchants.size} rows>"
   end
