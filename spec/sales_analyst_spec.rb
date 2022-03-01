@@ -120,7 +120,7 @@ RSpec.describe SalesAnalyst do
 
     it 'can determine successful_invoices_by_date' do
       expect(@sales_analyst.invoices_by_date("2012-02-26")).to be_a(Array)
-      expect(@sales_analyst.invoices_by_date("2012-02-26").first).to be_a(Transaction)
+      expect(@sales_analyst.invoices_by_date("2012-02-26").first).to be_a(Invoice)
     end
 
     xit 'can determine #total revenue by date' do

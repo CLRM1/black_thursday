@@ -242,15 +242,11 @@ class SalesAnalyst
     total
   end
 
-  def successful_transactions_by_date(date)
+  def invoices_by_date(date)
     time_date = Time.parse(date)
-    date_transactions = @transactions.transactions.find_all do |transaction|
-
+    date_invoices = @invoices.invoices.find_all do |transaction|
       transaction.created_at.strftime("%d/%m/%Y") == time_date.strftime("%d/%m/%Y")
     end
-    require "pry"; binding.pry
-    successful_transactions = date_transactions.find_all {|transaction| transaction.result != :failed }
-    successful_transactions
   end
 
   def total_revenue_by_date(date)
