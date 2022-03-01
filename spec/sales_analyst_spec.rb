@@ -130,10 +130,18 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
     end
 
+
+    it 'can determine revenue by invoice id' do
+      expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
+    end
+
     it 'can determine top revenue earners' do
-      expect(@sales_analyst.top_revenue_earners(1).first).to eq(Merchant)
+      expect(@sales_analyst.top_revenue_earners(5).first).to be_a(Merchant)
+      expect(@sales_analyst.top_revenue_earners(4).count).to eq(5)
 
     end
+
+
 
 
 
