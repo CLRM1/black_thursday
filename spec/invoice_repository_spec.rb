@@ -94,8 +94,8 @@ RSpec.describe InvoiceRepository do
 
   it 'can find by created at(date)' do
     date = Time.parse("2009-02-07")
-    expect(@invoice_repo.find_by_created_at(date).count).to eq(1)
-    expect(@invoice_repo.find_by_created_at(date).first).to be_a(Invoice)
+    # expect(@invoice_repo.find_by_created_at(date).count).to eq(1)
+    expect(@invoice_repo.find_by_created_at(date)).to be_a(Invoice)
 
 
   end

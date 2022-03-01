@@ -242,41 +242,17 @@ class SalesAnalyst
     total
   end
 
+
+
   def total_revenue_by_date(date)
-    invoice_items_by_date = @invoice_items.invoice_items.find_all do |invoice_item|
-
-      invoice_item.created_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
+    total = 0
+    invoice_id = @invoices.find_by_created_at(date).id
+    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
+      total += (invoice_item.unit_price * invoice_item.quantity)
     end
-            require "pry"; binding.pry
-
-
+    total
   end
 
-  # def invoices_by_date(date)
-  #
-  #   date_invoices = @invoices.invoices.find_all do |transaction|
-  #     transaction.updated_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
-  #   end
-  # end
-  #
-  # def invoice_ids_by_date(date)
-  #   invoices_by_date(date).map { |invoice| invoice.id }
-  # end
-  #
-  # def invoice_items_by_date(date)
-  #   invoice_ids_by_date(date).flat_map do |id|
-  #     @invoice_items.find_all_by_invoice_id(id)
-  #   end
-  # end
-  #
-  # def total_revenue_by_date(date)
-  #
-  #   n = invoice_items_by_date(date).map do |invoice|
-  #     # require "pry"; binding.pry
-  #     invoice.unit_price * invoice.quantity
-  #   end
-  #
-  #   n.sum
-  # end
+
 
 end

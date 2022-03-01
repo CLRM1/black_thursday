@@ -77,9 +77,9 @@ class InvoiceRepository
   end
 
   def find_by_created_at(date)
-    @invoices.find_all do |invoice|
+    @invoices.find do |invoice|
       invoice.created_at.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")
-    end 
+    end
   end
 
   def inspect
