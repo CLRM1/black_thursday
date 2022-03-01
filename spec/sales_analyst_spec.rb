@@ -127,8 +127,8 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.invoice_ids_by_date("2012-02-26").count).to eq(2)
     end
 
-    xit 'can determine #invoice items by date' do
-      expect(@sales_analyst.invoice_items_by_date("2009-02-26").count).to eq(12)
+    it 'can determine #invoice items by date' do
+      expect(@sales_analyst.invoice_items_by_date("2012-02-26").count).to eq(12)
     end
 
 

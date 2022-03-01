@@ -249,9 +249,14 @@ class SalesAnalyst
     end
   end
 
-
   def invoice_ids_by_date(date)
     invoices_by_date(date).map { |invoice| invoice.id }
+  end
+
+  def invoice_items_by_date(date)
+    invoice_ids_by_date(date).flat_map do |id|
+      @invoice_items.find_all_by_invoice_id(id)
+    end
   end
 
   def total_revenue_by_date(date)
