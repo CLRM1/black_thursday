@@ -240,8 +240,25 @@ class SalesAnalyst
       total += (invoice_item.unit_price * invoice_item.quantity)
     end
     total
-    # total = 0
-    # total
+  end
+
+  def successful_transactions_by_date(date)
+    time_date = Time.parse(date)
+    date_transactions = @transactions.transactions.find_all do |transaction|
+
+      transaction.created_at.strftime("%d/%m/%Y") == time_date.strftime("%d/%m/%Y")
+    end
+    require "pry"; binding.pry
+    successful_transactions = date_transactions.find_all {|transaction| transaction.result != :failed }
+    successful_transactions
+  end
+
+  def total_revenue_by_date(date)
+    successful_transactions_by_date(Time.parse(date))
+
+
+
+
   end
 
 end
