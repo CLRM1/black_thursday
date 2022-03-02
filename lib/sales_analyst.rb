@@ -311,11 +311,13 @@ class SalesAnalyst
   def invoice_items_by_revenue(merchant_id)
     invoice_items_by_revenue_hash = Hash.new(0)
     @invoices.find_all_by_merchant_id(merchant_id).each do |invoice|
-      @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
-        invoice_items_by_quantity_hash[invoice_item] += invoice_item.quantity
+      if invoice_paid_in_full?(invoice.id)
+        @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
+          invoice_items_by_revenue_hash[invoice_item] += (invoice_item.unit_price * invoice_item.quantity)
+        end
       end
     end
-    invoice_items_by_quantity_hash
+    invoice_items_by_revenue_hash
   end
 
   def best_item_for_merchant(merchant_id)
