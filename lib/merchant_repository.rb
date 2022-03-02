@@ -40,7 +40,7 @@ class MerchantRepository
 
   def create(attributes)
     id = current_highest_id + 1
-    @merchants << new_merchant = Merchant.new(id: id, name: attributes[:name])
+    @merchants << new_merchant = Merchant.new(id: id, name: attributes[:name], created_at: Time.now)
     new_merchant
   end
 

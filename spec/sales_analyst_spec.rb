@@ -154,26 +154,61 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
     end
 
+    it 'can return an array of arrays of invoices collected by merchant id' do
+      expect(@sales_analyst.invoices_by_merchant_id).to be_a(Array)
+      expect(@sales_analyst.invoices_by_merchant_id[0]).to be_a(Array)
+      expect(@sales_analyst.invoices_by_merchant_id[0][0]).to be_a(Invoice)
+    end
+
+    it 'can return a hash of merchants and their revenues' do
+      expect(@sales_analyst.merchant_revenues).to be_a Hash
+      expect(@sales_analyst.merchant_revenues.keys[0]).to be_a Merchant
+      expect(@sales_analyst.merchant_revenues.values[0]).to be_a BigDecimal
+    end
+
     it 'can determine top revenue earners' do
       expect(@sales_analyst.top_revenue_earners(5).first).to be_a(Merchant)
       expect(@sales_analyst.top_revenue_earners(5).count).to eq(5)
+    end
 
+    it 'can find merchant ids with pending invoices' do
+      expect(@sales_analyst.pending_merchant_ids).to be_a(Array)
+      expect(@sales_analyst.pending_merchant_ids[0]).to be_a(Integer)
     end
 
     it 'can determine merchants with pending invoices' do
       expect(@sales_analyst.merchants_with_pending_invoices.class).to eq(Array)
       expect(@sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
-
     end
 
+    it 'can create a hash with merchants and their item counts' do
+      expect(@sales_analyst.merchant_items).to be_a Hash
+      expect(@sales_analyst.merchant_items.keys.first).to be_a Integer
+    end
 
+    it 'can determine merchants with one item' do
+      expect(@sales_analyst.merchants_with_only_one_item.class).to eq(Array)
+      expect(@sales_analyst.merchants_with_only_one_item.first).to be_a(Merchant)
+    end
 
+    it 'can determine the total revenue for a single merchant' do
+      expect(@sales_analyst.revenue_by_merchant(12334194)).to be_a(BigDecimal)
+    end
 
+    it 'can sort invoice items by quantity for some merchant' do
+      expect(@sales_analyst.invoice_items_by_quantity(12334194)).to be_a Hash
+    end
 
+    it 'can determine the most sold item for  merchant' do
+      expect(@sales_analyst.most_sold_item_for_merchant(12334194).first).to be_a(Item)
+    end
 
+    it 'can sort invoice items by revenue for some merchant' do
+      expect(@sales_analyst.invoice_items_by_revenue(12334194)).to be_a Hash 
+    end
 
-
-
+    it 'can determine the best selling item for a merchant in terms of revenue' do
+      expect(@sales_analyst.best_item_for_merchant(12334194)).to be_a Item
+    end
   end
-
 end
