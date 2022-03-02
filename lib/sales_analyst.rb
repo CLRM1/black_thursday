@@ -286,8 +286,9 @@ class SalesAnalyst
 
   def merchants_with_pending_invoices
     @invoices.all_pending_invoices.map do |merchant_id|
-      @merchants.find_by_id(merchant_id)
-    end   
+       @merchants.find_by_id(merchant_id)
+
+    end.uniq
 
   end
 

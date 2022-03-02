@@ -69,9 +69,9 @@ class TransactionRepository
         transaction.invoice_id
       end
     end.compact
-    
-
   end
+
+  
 
   def inspect
    "#<#{self.class} #{@merchants.size} rows>"
