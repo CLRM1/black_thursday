@@ -309,7 +309,6 @@ class SalesAnalyst
   end
 
   def merchants_with_only_one_item_registered_in_month(month)
-    
     # month_number = Time.parse(month).month
     # merchants_by_month = @merchants.merchants.find_all do |merchant|
     #   merchant.created_at.month == month_number
@@ -322,5 +321,16 @@ class SalesAnalyst
     # end
   end
 
+  def revenue_by_merchant(merchant_id)
+    total = 0
+    @invoices.find_all_by_merchant_id(merchant_id).each do |invoice|
+      if @transactions.find_all_by_invoice_id(invoice.id).all?{|transaction| transaction.result == :success}
+        @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
+          total += invoice_item.unit_price
+        end
+      end
+    end
+    total
+  end
 
 end
