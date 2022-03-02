@@ -20,35 +20,43 @@ RSpec.describe SalesAnalyst do
 
   describe 'creates a working sales analyst' do
 
-    xit 'exists' do
-      # require 'pry'; binding.pry
+    it 'exists' do
       expect(@sales_analyst).to be_a(SalesAnalyst)
     end
 
-    xit 'can calculate average items per merchant' do
+    it 'can create a hash of merchant keys with values of their item counts' do
+      expect(@sales_analyst.item_count_per_merchant).to be_a(Hash)
+      expect(@sales_analyst.item_count_per_merchant.keys.count).to eq(475)
+    end
+
+    it 'can calculate average items per merchant' do
       expect(@sales_analyst.average_items_per_merchant).to eq(2.88)
     end
 
-    xit 'can calculate average items per merchant standard deviation' do
+    it 'can calculate the variance for merchants and their item counts' do
+      expect(@sales_analyst.merchant_item_variance).to eq(5034.92)
+    end
+
+    it 'can calculate average items per merchant standard deviation' do
       expect(@sales_analyst.average_items_per_merchant_standard_deviation).to eq(3.26)
     end
 
-    xit 'dispays merchants with high item count' do
+    it 'dispays merchants with high item count' do
       expect(@sales_analyst.merchants_with_high_item_count[0]).to be_a(Merchant)
       expect(@sales_analyst.merchants_with_high_item_count.count).to eq(52)
     end
 
-    xit 'finds average item price per merchant' do
+    it 'finds average item price per merchant' do
       expect(@sales_analyst.average_item_price_for_merchant(12334159)).to be_a(BigDecimal)
       expect(@sales_analyst.average_item_price_for_merchant(12334105).to_f).to eq(16.66)
     end
 
-    xit 'finds average price across all merchants' do
+    it 'finds average price across all merchants' do
       expect(@sales_analyst.average_average_price_per_merchant).to be_a(BigDecimal)
       expect(@sales_analyst.average_average_price_per_merchant).to eq(350.29)
     end
 
-    xit 'finds items two STD above average price' do
+    it 'finds items two STD above average price' do
       expect(@sales_analyst.golden_items.length).to eq(5)
       expect(@sales_analyst.golden_items.first.class).to eq(Item)
     end
@@ -57,46 +65,58 @@ RSpec.describe SalesAnalyst do
 
   describe "#Iteration 2: creates business intelligence" do
 
-    xit 'can determine the average invoices per merchant' do
+    it 'can create a hash with merchant keys and the values of number of invoices for that merchant' do
+      expect(@sales_analyst.invoice_count_per_merchant).to be_a(Hash)
+    end
+
+    it 'can determine the average invoices per merchant' do
       expect(@sales_analyst.average_invoices_per_merchant).to eq(10.49)
     end
 
-    xit "can determine the average invoices per merchant's STD" do
+    it 'can determine the variance for merchant invoices' do
+      expect(@sales_analyst.merchant_invoice_variance).to eq(5132.7475)
+    end
+
+    it "can determine the average invoices per merchant's STD" do
       expect(@sales_analyst.average_invoices_per_merchant_standard_deviation).to eq(3.29)
     end
 
-    xit "can determine the top performing merchants" do
+    it "can determine the top performing merchants" do
       expect(@sales_analyst.top_merchants_by_invoice_count.count).to eq(12)
       expect(@sales_analyst.top_merchants_by_invoice_count[0]).to be_a(Merchant)
     end
 
-    xit "can determine the lowest performing merchants" do
+    it "can determine the lowest performing merchants" do
       expect(@sales_analyst.bottom_merchants_by_invoice_count.count).to eq(4)
       expect(@sales_analyst.bottom_merchants_by_invoice_count[0]).to be_a(Merchant)
     end
 
-    xit "can determine the day of the keep based on an invoice" do
+    it "can determine the day of the keep based on an invoice" do
       expect(@sales_analyst.invoices_per_day).to be_a(Hash)
       expect(@sales_analyst.invoices_per_day.keys.count).to eq(7)
     end
 
-    xit "can determine average invoices by day" do
+    it "can determine average invoices by day" do
       expect(@sales_analyst.average_invoices_per_day).to eq(712)
     end
 
-    xit "can determine invoices by day" do
+    it "can determine invoices by day" do
       expect(@sales_analyst.invoices_by_day.count).to eq(4985)
     end
 
-    xit "can determine invoices by day STD" do
+    it "can determine invoices by day STD" do
       expect(@sales_analyst.invoices_per_day_STD.round).to eq(18)
     end
 
-    xit "can determine the days with the most sales" do
+    it 'can convert day-numbers to weekday names' do
+      expect(@sales_analyst.num_to_day_converter(2)).to eq('Tuesday')
+    end
+
+    it "can determine the days with the most sales" do
       expect(@sales_analyst.top_days_by_invoice_count).to eq(["Wednesday"])
     end
 
-    xit "can determine the percentage of invoices based on status" do
+    it "can determine the percentage of invoices based on status" do
       expect(@sales_analyst.invoice_status(:pending)).to eq(29.55)
       expect(@sales_analyst.invoice_status(:shipped)).to eq(56.95)
       expect(@sales_analyst.invoice_status(:returned)).to eq(13.5)
@@ -104,7 +124,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe 'Iteration 3: more business intelligence' do
-    xit 'can determine if an invoice is paid in full' do
+    it 'can determine if an invoice is paid in full' do
       expect(@sales_analyst.invoice_paid_in_full?(1)).to eq(true)
       expect(@sales_analyst.invoice_paid_in_full?(200)).to eq(true)
       expect(@sales_analyst.invoice_paid_in_full?(204)).to eq(false)
@@ -130,31 +150,65 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
     end
 
-
-    xit 'can determine revenue by invoice id' do
+    it 'can determine revenue by invoice id' do
       expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
+    end
+
+    it 'can return an array of arrays of invoices collected by merchant id' do
+      expect(@sales_analyst.invoices_by_merchant_id).to be_a(Array)
+      expect(@sales_analyst.invoices_by_merchant_id[0]).to be_a(Array)
+      expect(@sales_analyst.invoices_by_merchant_id[0][0]).to be_a(Invoice)
+    end
+
+    it 'can return a hash of merchants and their revenues' do
+      expect(@sales_analyst.merchant_revenues).to be_a Hash
+      expect(@sales_analyst.merchant_revenues.keys[0]).to be_a Merchant
+      expect(@sales_analyst.merchant_revenues.values[0]).to be_a BigDecimal
     end
 
     it 'can determine top revenue earners' do
       expect(@sales_analyst.top_revenue_earners(5).first).to be_a(Merchant)
       expect(@sales_analyst.top_revenue_earners(5).count).to eq(5)
+    end
 
+    it 'can find merchant ids with pending invoices' do
+      expect(@sales_analyst.pending_merchant_ids).to be_a(Array)
+      expect(@sales_analyst.pending_merchant_ids[0]).to be_a(Integer)
     end
 
     it 'can determine merchants with pending invoices' do
       expect(@sales_analyst.merchants_with_pending_invoices.class).to eq(Array)
       expect(@sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
-
     end
 
+    it 'can create a hash with merchants and their item counts' do
+      expect(@sales_analyst.merchant_items).to be_a Hash
+      expect(@sales_analyst.merchant_items.keys.first).to be_a Integer
+    end
 
+    it 'can determine merchants with one item' do
+      expect(@sales_analyst.merchants_with_only_one_item.class).to eq(Array)
+      expect(@sales_analyst.merchants_with_only_one_item.first).to be_a(Merchant)
+    end
 
+    it 'can determine the total revenue for a single merchant' do
+      expect(@sales_analyst.revenue_by_merchant(12334194)).to be_a(BigDecimal)
+    end
 
+    it 'can sort invoice items by quantity for some merchant' do
+      expect(@sales_analyst.invoice_items_by_quantity(12334194)).to be_a Hash
+    end
 
+    it 'can determine the most sold item for  merchant' do
+      expect(@sales_analyst.most_sold_item_for_merchant(12334194).first).to be_a(Item)
+    end
 
+    it 'can sort invoice items by revenue for some merchant' do
+      expect(@sales_analyst.invoice_items_by_revenue(12334194)).to be_a Hash 
+    end
 
-
-
+    it 'can determine the best selling item for a merchant in terms of revenue' do
+      expect(@sales_analyst.best_item_for_merchant(12334194)).to be_a Item
+    end
   end
-
 end

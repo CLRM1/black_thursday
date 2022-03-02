@@ -15,6 +15,7 @@ require_relative '../lib/invoice_item_repository'
 require 'bigdecimal'
 require 'pry'
 require 'CSV'
+require 'Date'
 
 class SalesAnalyst
 
@@ -34,49 +35,35 @@ class SalesAnalyst
     @invoice_items = invoice_items
   end
 
-  def average_items_per_merchant
+  def item_count_per_merchant
     merchant_ids = @items.items.map {|item| item.merchant_id}
     merchant_items = Hash.new(0)
     merchant_ids.each do |id|
       merchant_items[id] += 1
     end
-    ((merchant_items.values.sum).to_f / merchant_items.keys.count).round(2)
+    merchant_items
+  end
+
+  def average_items_per_merchant
+    ((item_count_per_merchant.values.sum).to_f / item_count_per_merchant.keys.count).round(2)
+  end
+
+  def merchant_item_variance
+    item_count_per_merchant.values.map do |number|
+      (number - average_items_per_merchant) ** 2
+    end.sum
   end
 
   def average_items_per_merchant_standard_deviation
-    merchant_ids = @items.items.map {|item| item.merchant_id}
-    merchant_items = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_items[id] += 1
-    end
-
-    average_merchant_items = ((merchant_items.values.sum).to_f / merchant_items.keys.count)
-    empty = []
-    merchant_items.values.each do |number|
-      result = (number - average_merchant_items) * (number - average_merchant_items)
-      empty << result
-    end
-
-    Math.sqrt(empty.sum / (merchant_items.count - 1)).round(2)
+    Math.sqrt(merchant_item_variance / (item_count_per_merchant.count - 1)).round(2)
   end
 
   def merchants_with_high_item_count
-    merchant_ids = @items.items.map {|item| item.merchant_id}
-    merchant_items = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_items[id] += 1
-    end
-
-    average_merchant_items = ((merchant_items.values.sum).to_f / merchant_items.keys.count)
-    item_count_standard = average_merchant_items + average_items_per_merchant_standard_deviation
-
-    high_item_count_merchants_id = merchant_items.find_all do |key,value|
+    item_count_standard = average_items_per_merchant + average_items_per_merchant_standard_deviation
+    high_item_count_merchants_id = item_count_per_merchant.find_all do |key,value|
       key if value > item_count_standard
     end
-
-    high_item_count_merchants_id.map do |merchants_id|
-      @merchants.find_by_id(merchants_id[0])
-    end
+    high_item_count_merchants_id.map{|merchants_id| @merchants.find_by_id(merchants_id[0])}
   end
 
   def average_item_price_for_merchant(merchant_id)
@@ -111,69 +98,49 @@ class SalesAnalyst
     end
   end
 
-  def average_invoices_per_merchant
+  def invoice_count_per_merchant
     merchant_ids = @invoices.invoices.map {|invoice| invoice.merchant_id}
     merchant_invoices = Hash.new(0)
     merchant_ids.each do |id|
       merchant_invoices[id] += 1
     end
-    ((merchant_invoices.values.sum).to_f / merchant_invoices.keys.count).round(2)
+    merchant_invoices
+  end
+
+  def average_invoices_per_merchant
+    (invoice_count_per_merchant.values.sum.to_f / invoice_count_per_merchant.keys.count).round(2)
+  end
+
+  def merchant_invoice_variance
+    invoice_count_per_merchant.values.map do |number|
+      (number - average_invoices_per_merchant) ** 2
+    end.sum
   end
 
   def average_invoices_per_merchant_standard_deviation
-    merchant_ids = @invoices.invoices.map {|invoice| invoice.merchant_id}
-    merchant_invoices = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_invoices[id] += 1
-    end
-
-    average_merchant_invoices= ((merchant_invoices.values.sum).to_f / merchant_invoices.keys.count)
-    empty = []
-    merchant_invoices.values.each do |number|
-      result = (number - average_merchant_invoices) * (number - average_merchant_invoices)
-      empty << result
-    end
-
-    Math.sqrt(empty.sum / (merchant_invoices.count - 1)).round(2)
+    Math.sqrt(merchant_invoice_variance / (invoice_count_per_merchant.count - 1)).round(2)
   end
 
   def top_merchants_by_invoice_count
     golden_invoices = (average_invoices_per_merchant + (average_invoices_per_merchant_standard_deviation * 2))
-
-    merchant_ids = @invoices.invoices.map {|invoice| invoice.merchant_id}
-    merchant_invoices = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_invoices[@merchants.find_by_id(id)] += 1
-    end
-
-    golden_merchants = merchant_invoices.select do |merchant, invoice_count|
+    golden_merchants = invoice_count_per_merchant.select do |merchant, invoice_count|
       invoice_count > golden_invoices
     end
-    golden_merchants.keys
+    golden_merchants.keys.map {|id| @merchants.find_by_id(id)}
   end
 
   def bottom_merchants_by_invoice_count
     ungolden_invoices = (average_invoices_per_merchant - (average_invoices_per_merchant_standard_deviation * 2))
-
-    merchant_ids = @invoices.invoices.map {|invoice| invoice.merchant_id}
-    merchant_invoices = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_invoices[@merchants.find_by_id(id)] += 1
-    end
-
-    ungolden_merchants = merchant_invoices.select do |merchant, invoice_count|
+    ungolden_merchants = invoice_count_per_merchant.select do |merchant, invoice_count|
       invoice_count < ungolden_invoices
     end
-    ungolden_merchants.keys
+    ungolden_merchants.keys.map {|id| @merchants.find_by_id(id)}
   end
 
   def invoices_by_day
     @invoices.invoices.map do |invoice|
-      if invoice.created_at.class == Time
-        invoice.created_at.wday
-      else
-       Time.parse(invoice.created_at).wday
-     end
+      invoice.created_at.class == Time ?
+      invoice.created_at.wday : Time.parse(invoice.created_at).wday
     end
   end
 
@@ -197,21 +164,7 @@ class SalesAnalyst
   end
 
   def num_to_day_converter(num)
-    if num == 0
-      'Sunday'
-    elsif num == 1
-      'Monday'
-    elsif num == 2
-      'Tuesday'
-    elsif num == 3
-      'Wednesday'
-    elsif num == 4
-      'Thursday'
-    elsif num == 5
-      'Friday'
-    elsif num == 6
-      'Saturday'
-    end
+    Date::DAYNAMES[num]
   end
 
   def top_days_by_invoice_count
@@ -235,66 +188,142 @@ class SalesAnalyst
   end
 
   def invoice_total(invoice_id)
-    total = 0
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-      total += (invoice_item.unit_price * invoice_item.quantity)
-    end
-    total
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
-
-
   def total_revenue_by_date(date)
-    total = 0
     invoice_id = @invoices.find_by_created_at(date).id
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-      total += (invoice_item.unit_price * invoice_item.quantity)
-    end
-    total
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
   def revenue_by_invoice_id(invoice_id)
-    total = 0
-
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-        total += (invoice_item.unit_price * invoice_item.quantity)
-
-    end
-    total
-
-
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
-  def top_revenue_earners(amount_of_merchants = 20)
+  def invoices_by_merchant_id
     merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
-    invoices_by_merchant_id = merchant_ids.map do |merchant_id|
+    merchant_ids.map do |merchant_id|
       @invoices.find_all_by_merchant_id(merchant_id)
     end
-    merchant_revenues = Hash.new(0)
+  end
+
+  def merchant_revenues
+    merchant_revenues_hash = Hash.new(0)
     invoices_by_merchant_id.each do |merchant_invoices|
       merchant_invoices.each do |invoice|
         if @transactions.all_successful_transactions.include?(invoice.id)
-          merchant_revenues[@merchants.find_by_id(invoice.merchant_id)] += revenue_by_invoice_id(invoice.id)
+          merchant_revenues_hash[@merchants.find_by_id(invoice.merchant_id)] += revenue_by_invoice_id(invoice.id)
         end
       end
     end
-    sorted = merchant_revenues.sort_by { |key, value| value }.reverse
-    sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
-    sorted_merchants[0..(amount_of_merchants - 1)]
-
+    merchant_revenues_hash
   end
 
-  def merchants_with_pending_invoices
-    pending_merchant_ids = @invoices.invoices.map do |invoice|
+  def top_revenue_earners(amount_of_merchants = 20)
+    sorted = merchant_revenues.sort_by { |key, value| value }.reverse
+    sorted_merchants = sorted.map {|merchant_and_value| merchant_and_value.first}
+    sorted_merchants[0..(amount_of_merchants - 1)]
+  end
+
+  def pending_merchant_ids
+    @invoices.invoices.map do |invoice|
       if @transactions.find_all_by_invoice_id(invoice.id).all? {|transaction| transaction.result == :failed}
         invoice.merchant_id
       end
     end.compact
-    pending_merchant_ids.map do |merchant_id|
-      @merchants.find_by_id(merchant_id)
-    end.uniq  
   end
 
+  def merchants_with_pending_invoices
+    pending_merchant_ids.map do |merchant_id|
+      @merchants.find_by_id(merchant_id)
+    end.uniq
+  end
 
+  def merchants_with_only_one_item_registered_in_month(month)
+    month_number = Time.parse(month).month
+    month_merchants = @merchants.merchants.find_all do |merchant|
+      merchant.created_at.month == month_number
+    end
+    month_merchant_items = Hash.new(0)
+    month_merchants.each do |merchant|
+      month_merchant_items[merchant] =
+      @invoices.find_all_by_merchant_id(merchant.id).map do |invoice|
+        if invoice.created_at.month == month_number
+          @invoice_items.invoice_items.find_all do |invoice_item|
+            invoice_item.invoice_id == invoice.id
+          end.count
+        end
+      end.compact.sum
+    end
+    month_merchant_items.find_all {|merchant, item_count| item_count == 1}.flatten
+  end
+
+  def merchant_items
+    merchant_ids = @items.items.map {|item| item.merchant_id}
+    merchant_items_hash = Hash.new(0)
+    merchant_ids.each do |id|
+      merchant_items_hash[id] += 1
+    end
+    merchant_items_hash
+  end
+
+  def merchants_with_only_one_item
+    single_item_merchants = merchant_items.map do |merchant_id, num_of_items|
+      if num_of_items == 1
+        @merchants.find_by_id(merchant_id)
+      end
+    end.compact
+  end
+
+  def revenue_by_merchant(merchant_id)
+    @invoices.find_all_by_merchant_id(merchant_id).map do |invoice|
+      if @transactions.find_all_by_invoice_id(invoice.id).all?{|transaction| transaction.result == :success}
+        @invoice_items.find_all_by_invoice_id(invoice.id).map do |invoice_item|
+          invoice_item.unit_price
+        end.sum
+      end
+    end.compact.sum
+  end
+
+  def invoice_items_by_quantity(merchant_id)
+    invoice_items_by_quantity_hash = Hash.new(0)
+    @invoices.find_all_by_merchant_id(merchant_id).each do |invoice|
+      @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
+        invoice_items_by_quantity_hash[invoice_item] += invoice_item.quantity
+      end
+    end
+    invoice_items_by_quantity_hash
+  end
+
+  def most_sold_item_for_merchant(merchant_id)
+    sorted = invoice_items_by_quantity(merchant_id).sort_by {|key, value| value}.reverse
+    sorted_invoice_items = sorted.find_all {|invoice_item| invoice_item[0].quantity == sorted[0][0].quantity}
+    winners = sorted_invoice_items.map {|invoice_item_array| invoice_item_array[0]}
+    winners.map {|invoice_item| @items.find_by_id(invoice_item.item_id)}
+  end
+
+  def invoice_items_by_revenue(merchant_id)
+    invoice_items_by_revenue_hash = Hash.new(0)
+    @invoices.find_all_by_merchant_id(merchant_id).each do |invoice|
+      if invoice_paid_in_full?(invoice.id)
+        @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
+          invoice_items_by_revenue_hash[invoice_item] += (invoice_item.unit_price * invoice_item.quantity)
+        end
+      end
+    end
+    invoice_items_by_revenue_hash
+  end
+
+  def best_item_for_merchant(merchant_id)
+    sorted = invoice_items_by_revenue(merchant_id).sort_by {|key, value| value}.reverse
+    winner = sorted[0][0]
+    @items.find_by_id(winner.item_id)
+  end
 
 end
