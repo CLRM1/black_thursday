@@ -44,29 +44,17 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    merchant_ids = @items.items.map {|item| item.merchant_id}
-    merchant_items = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_items[id] += 1
-    end
-    ((merchant_items.values.sum).to_f / merchant_items.keys.count).round(2)
+    ((item_count_per_merchant.values.sum).to_f / item_count_per_merchant.keys.count).round(2)
+  end
+
+  def merchant_item_variance
+    item_count_per_merchant.values.map do |number|
+      (number - average_items_per_merchant) * (number - average_items_per_merchant)
+    end.sum
   end
 
   def average_items_per_merchant_standard_deviation
-    merchant_ids = @items.items.map {|item| item.merchant_id}
-    merchant_items = Hash.new(0)
-    merchant_ids.each do |id|
-      merchant_items[id] += 1
-    end
-
-    average_merchant_items = ((merchant_items.values.sum).to_f / merchant_items.keys.count)
-    empty = []
-    merchant_items.values.each do |number|
-      result = (number - average_merchant_items) * (number - average_merchant_items)
-      empty << result
-    end
-
-    Math.sqrt(empty.sum / (merchant_items.count - 1)).round(2)
+    Math.sqrt(merchant_item_variance / (item_count_per_merchant.count - 1)).round(2)
   end
 
   def merchants_with_high_item_count
