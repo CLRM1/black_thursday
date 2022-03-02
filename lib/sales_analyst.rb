@@ -284,6 +284,13 @@ class SalesAnalyst
 
   end
 
+  def merchants_with_pending_invoices
+    @invoices.all_pending_invoices.map do |merchant_id|
+      @merchants.find_by_id(merchant_id)
+    end   
+
+  end
+
 
 
 end
