@@ -65,8 +65,16 @@ RSpec.describe SalesAnalyst do
 
   describe "#Iteration 2: creates business intelligence" do
 
+    it 'can create a hash with merchant keys and the values of number of invoices for that merchant' do
+      expect(@sales_analyst.invoice_count_per_merchant).to be_a(Hash)
+    end
+
     it 'can determine the average invoices per merchant' do
       expect(@sales_analyst.average_invoices_per_merchant).to eq(10.49)
+    end
+
+    it 'can determine the variance for merchant invoices' do
+      expect(@sales_analyst.merchant_invoice_variance).to eq(5132.7475)
     end
 
     it "can determine the average invoices per merchant's STD" do
