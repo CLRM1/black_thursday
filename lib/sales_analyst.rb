@@ -281,7 +281,6 @@ class SalesAnalyst
     sorted = merchant_revenues.sort_by { |key, value| value }.reverse
     sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
     sorted_merchants[0..(amount_of_merchants - 1)]
-
   end
 
   def merchants_with_pending_invoices
@@ -331,6 +330,19 @@ class SalesAnalyst
       end
     end
     total
+  end
+
+  def most_sold_item_for_merchant(merchant_id)
+    invoice_items_by_quantity = Hash.new(0)
+    @invoices.find_all_by_merchant_id(merchant_id).each do |invoice|
+      @invoice_items.find_all_by_invoice_id(invoice.id).each do |invoice_item|
+        invoice_items_by_quantity[invoice_item] += invoice_item.quantity
+      end
+    end
+    sorted = invoice_items_by_quantity.sort_by {|key, value| value}.reverse
+    sorted_invoice_items = sorted.find_all {|invoice_item| invoice_item[0].quantity == sorted[0][0].quantity}
+    winners = sorted_invoice_items.map {|invoice_item_array| invoice_item_array[0]}
+    winners.map {|invoice_item| @items.find_by_id(invoice_item.item_id)}
   end
 
 end

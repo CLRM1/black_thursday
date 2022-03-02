@@ -162,7 +162,7 @@ RSpec.describe SalesAnalyst do
     end
 
     it 'can determine the most sold item for  merchant' do
-      expect(@sales_analyst.most_sold_item_for_merchant(12334194)).to be_a(Item)
+      expect(@sales_analyst.most_sold_item_for_merchant(12334194).first).to be_a(Item)
     end
 
 
