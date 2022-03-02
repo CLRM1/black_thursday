@@ -34,6 +34,15 @@ class SalesAnalyst
     @invoice_items = invoice_items
   end
 
+  def item_count_per_merchant
+    merchant_ids = @items.items.map {|item| item.merchant_id}
+    merchant_items = Hash.new(0)
+    merchant_ids.each do |id|
+      merchant_items[id] += 1
+    end
+    merchant_items
+  end
+
   def average_items_per_merchant
     merchant_ids = @items.items.map {|item| item.merchant_id}
     merchant_items = Hash.new(0)
@@ -292,7 +301,7 @@ class SalesAnalyst
     end.compact
     pending_merchant_ids.map do |merchant_id|
       @merchants.find_by_id(merchant_id)
-    end.uniq  
+    end.uniq
   end
 
 
