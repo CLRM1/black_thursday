@@ -161,7 +161,9 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.revenue_by_merchant(12334194)).to be_a(BigDecimal)
     end
 
-
+    it 'can determine the most sold item for  merchant' do
+      expect(@sales_analyst.most_sold_item_for_merchant(12334194)).to be_a(Item)
+    end
 
 
 
