@@ -308,6 +308,19 @@ class SalesAnalyst
     end.compact
   end
 
+  def merchants_with_only_one_item_registered_in_month(month)
+    
+    # month_number = Time.parse(month).month
+    # merchants_by_month = @merchants.merchants.find_all do |merchant|
+    #   merchant.created_at.month == month_number
+    # end
+    # merchant_invoice_items_by_month = Hash.new(0)
+    # @invoices.invoices.each do |invoice|
+    #   merchants_by_month.each do |merchant|
+    #     merchant_invoice_items_by_month[merchant] += @invoice_items.find_all_by_invoice_id(invoice.id)
+    #   end
+    # end
+  end
 
 
 end
