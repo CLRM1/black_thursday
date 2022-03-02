@@ -285,11 +285,14 @@ class SalesAnalyst
   end
 
   def merchants_with_pending_invoices
-    @invoices.all_pending_invoices.map do |merchant_id|
-       @merchants.find_by_id(merchant_id)
-
-    end.uniq
-
+    pending_merchant_ids = @invoices.invoices.map do |invoice|
+      if @transactions.find_all_by_invoice_id(invoice.id).all? {|transaction| transaction.result == :failed}
+        invoice.merchant_id
+      end
+    end.compact
+    pending_merchant_ids.map do |merchant_id|
+      @merchants.find_by_id(merchant_id)
+    end.uniq  
   end
 
 

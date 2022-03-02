@@ -71,13 +71,7 @@ class TransactionRepository
     end.compact
   end
 
-  def all_failed_transactions
-    @transactions.map do |transaction|
-      if transaction.result == :failed
-        transaction.invoice_id
-      end
-    end.compact
-  end
+
 
 
   def inspect
