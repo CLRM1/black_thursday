@@ -292,7 +292,20 @@ class SalesAnalyst
     end.compact
     pending_merchant_ids.map do |merchant_id|
       @merchants.find_by_id(merchant_id)
-    end.uniq  
+    end.uniq
+  end
+
+  def merchants_with_only_one_item
+    merchant_ids = @items.items.map {|item| item.merchant_id}
+    merchant_items = Hash.new(0)
+    merchant_ids.each do |id|
+      merchant_items[id] += 1
+    end
+    single_item_merchants = merchant_items.map do |merchant_id, num_of_items|
+      if num_of_items == 1
+        @merchants.find_by_id(merchant_id)
+      end
+    end.compact
   end
 
 

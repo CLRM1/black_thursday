@@ -147,6 +147,10 @@ RSpec.describe SalesAnalyst do
 
     end
 
+    it 'can determine merchants with one item' do
+      expect(@sales_analyst.merchants_with_only_one_item.class).to eq(Array)
+      expect(@sales_analyst.merchants_with_only_one_item.first).to be_a(Merchant)
+    end
 
 
 
