@@ -321,7 +321,9 @@ class SalesAnalyst
   end
 
   def best_item_for_merchant(merchant_id)
-
+    sorted = invoice_items_by_revenue(merchant_id).sort_by {|key, value| value}.reverse
+    winner = sorted[0][0]
+    @items.find_by_id(winner.item_id)
   end
 
 end
