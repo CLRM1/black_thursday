@@ -240,8 +240,61 @@ class SalesAnalyst
       total += (invoice_item.unit_price * invoice_item.quantity)
     end
     total
-    # total = 0
-    # total
   end
+
+
+
+  def total_revenue_by_date(date)
+    total = 0
+    invoice_id = @invoices.find_by_created_at(date).id
+    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
+      total += (invoice_item.unit_price * invoice_item.quantity)
+    end
+    total
+  end
+
+  def revenue_by_invoice_id(invoice_id)
+    total = 0
+
+    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
+        total += (invoice_item.unit_price * invoice_item.quantity)
+
+    end
+    total
+
+
+  end
+
+  def top_revenue_earners(amount_of_merchants = 20)
+    merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
+    invoices_by_merchant_id = merchant_ids.map do |merchant_id|
+      @invoices.find_all_by_merchant_id(merchant_id)
+    end
+    merchant_revenues = Hash.new(0)
+    invoices_by_merchant_id.each do |merchant_invoices|
+      merchant_invoices.each do |invoice|
+        if @transactions.all_successful_transactions.include?(invoice.id)
+          merchant_revenues[@merchants.find_by_id(invoice.merchant_id)] += revenue_by_invoice_id(invoice.id)
+        end
+      end
+    end
+    sorted = merchant_revenues.sort_by { |key, value| value }.reverse
+    sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
+    sorted_merchants[0..(amount_of_merchants - 1)]
+
+  end
+
+  def merchants_with_pending_invoices
+    pending_merchant_ids = @invoices.invoices.map do |invoice|
+      if @transactions.find_all_by_invoice_id(invoice.id).all? {|transaction| transaction.result == :failed}
+        invoice.merchant_id
+      end
+    end.compact
+    pending_merchant_ids.map do |merchant_id|
+      @merchants.find_by_id(merchant_id)
+    end.uniq  
+  end
+
+
 
 end

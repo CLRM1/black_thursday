@@ -95,6 +95,12 @@ RSpec.describe TransactionRepository do
       expect(@tr.find_by_id(4986)).to eq(nil)
     end
 
+    it 'can give all successful transactions' do
+      expect(@tr.all_successful_transactions.count).to eq(4158)
+    end
+
+  
+
   end
 
 end
