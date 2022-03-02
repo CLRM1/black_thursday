@@ -82,6 +82,15 @@ class InvoiceRepository
     end
   end
 
+  def all_pending_invoices
+    @invoices.map do |invoice|
+      if invoice.status == :pending
+        invoice.merchant_id
+      end
+    end.compact    
+
+  end
+
   def inspect
    "#<#{self.class} #{@merchants.size} rows>"
   end
