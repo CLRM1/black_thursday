@@ -141,6 +141,12 @@ RSpec.describe SalesAnalyst do
 
     end
 
+    it 'can determine merchants with pending invoices' do
+      expect(@sales_analyst.merchants_with_pending_invoices.class).to eq(Array)
+      expect(@sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
+
+    end
+
 
 
 

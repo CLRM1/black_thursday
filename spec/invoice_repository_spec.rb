@@ -97,7 +97,10 @@ RSpec.describe InvoiceRepository do
     # expect(@invoice_repo.find_by_created_at(date).count).to eq(1)
     expect(@invoice_repo.find_by_created_at(date)).to be_a(Invoice)
 
+  end
 
+  it 'can give a list of merchant ids with pending invoices' do
+    expect(@invoice_repo.all_pending_invoices.count).to eq(1473)
   end
 
 
