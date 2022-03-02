@@ -15,6 +15,7 @@ require_relative '../lib/invoice_item_repository'
 require 'bigdecimal'
 require 'pry'
 require 'CSV'
+require 'Date'
 
 class SalesAnalyst
 
@@ -138,11 +139,8 @@ class SalesAnalyst
 
   def invoices_by_day
     @invoices.invoices.map do |invoice|
-      if invoice.created_at.class == Time
-        invoice.created_at.wday
-      else
-       Time.parse(invoice.created_at).wday
-     end
+      invoice.created_at.class == Time ?
+      invoice.created_at.wday : Time.parse(invoice.created_at).wday
     end
   end
 
@@ -166,21 +164,7 @@ class SalesAnalyst
   end
 
   def num_to_day_converter(num)
-    if num == 0
-      'Sunday'
-    elsif num == 1
-      'Monday'
-    elsif num == 2
-      'Tuesday'
-    elsif num == 3
-      'Wednesday'
-    elsif num == 4
-      'Thursday'
-    elsif num == 5
-      'Friday'
-    elsif num == 6
-      'Saturday'
-    end
+    Date::DAYNAMES[num]
   end
 
   def top_days_by_invoice_count
@@ -204,34 +188,22 @@ class SalesAnalyst
   end
 
   def invoice_total(invoice_id)
-    total = 0
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-      total += (invoice_item.unit_price * invoice_item.quantity)
-    end
-    total
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
-
-
   def total_revenue_by_date(date)
-    total = 0
     invoice_id = @invoices.find_by_created_at(date).id
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-      total += (invoice_item.unit_price * invoice_item.quantity)
-    end
-    total
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
   def revenue_by_invoice_id(invoice_id)
-    total = 0
-
-    @invoice_items.find_all_by_invoice_id(invoice_id).each do |invoice_item|
-        total += (invoice_item.unit_price * invoice_item.quantity)
-
-    end
-    total
-
-
+    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
+      (invoice_item.unit_price * invoice_item.quantity)
+    end.sum
   end
 
   def top_revenue_earners(amount_of_merchants = 20)
@@ -239,6 +211,7 @@ class SalesAnalyst
     invoices_by_merchant_id = merchant_ids.map do |merchant_id|
       @invoices.find_all_by_merchant_id(merchant_id)
     end
+
     merchant_revenues = Hash.new(0)
     invoices_by_merchant_id.each do |merchant_invoices|
       merchant_invoices.each do |invoice|
@@ -247,6 +220,7 @@ class SalesAnalyst
         end
       end
     end
+    
     sorted = merchant_revenues.sort_by { |key, value| value }.reverse
     sorted_merchants = sorted.map { |merchant_and_value| merchant_and_value.first }
     sorted_merchants[0..(amount_of_merchants - 1)]

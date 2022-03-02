@@ -108,6 +108,10 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.invoices_per_day_STD.round).to eq(18)
     end
 
+    it 'can convert day-numbers to weekday names' do
+      expect(@sales_analyst.num_to_day_converter(2)).to eq('Tuesday')
+    end
+
     it "can determine the days with the most sales" do
       expect(@sales_analyst.top_days_by_invoice_count).to eq(["Wednesday"])
     end
@@ -145,7 +149,6 @@ RSpec.describe SalesAnalyst do
       time = Time.parse("2009-02-07")
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
     end
-
 
     it 'can determine revenue by invoice id' do
       expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
