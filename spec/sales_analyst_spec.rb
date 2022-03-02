@@ -152,7 +152,10 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.merchants_with_only_one_item.first).to be_a(Merchant)
     end
 
-
+    it 'can determine merchants that only sell one item by month registered' do
+      expect(@sales_analyst.merchants_with_only_one_item_registered_in_month("Month name").class).to eq(Array)
+      expect(@sales_analyst.merchants_with_only_one_item_registered_in_month("Month name").first).to be_a(Merchant)
+    end
 
 
 
