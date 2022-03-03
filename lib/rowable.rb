@@ -1,7 +1,7 @@
 module Rowable
 
   def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
+    CSV.read(@filename, headers: true, header_converters: :symbol)
   end
 
   def inspect
