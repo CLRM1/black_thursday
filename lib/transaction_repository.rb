@@ -1,4 +1,5 @@
 require_relative '../lib/transaction'
+require_relative '../lib/rowable'
 require 'bigdecimal'
 require 'CSV'
 require 'time'
@@ -8,13 +9,11 @@ class TransactionRepository
 
   attr_reader :filename, :transactions
 
+  include Rowable
+
   def initialize(filename)
     @filename = filename
     @transactions = self.all
-  end
-
-  def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
   end
 
   def all
@@ -69,10 +68,6 @@ class TransactionRepository
         transaction.invoice_id
       end
     end.compact
-  end
-
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end
