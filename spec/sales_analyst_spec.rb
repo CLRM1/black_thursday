@@ -150,10 +150,6 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
     end
 
-    it 'can determine revenue by invoice id' do
-      expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
-    end
-
     it 'can return an array of arrays of invoices collected by merchant id' do
       expect(@sales_analyst.invoices_by_merchant_id).to be_a(Array)
       expect(@sales_analyst.invoices_by_merchant_id[0]).to be_a(Array)

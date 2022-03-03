@@ -200,12 +200,6 @@ class SalesAnalyst
     end.sum
   end
 
-  def revenue_by_invoice_id(invoice_id)
-    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
-      (invoice_item.unit_price * invoice_item.quantity)
-    end.sum
-  end
-
   def invoices_by_merchant_id
     merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
     merchant_ids.map do |merchant_id|
@@ -218,7 +212,7 @@ class SalesAnalyst
     invoices_by_merchant_id.each do |merchant_invoices|
       merchant_invoices.each do |invoice|
         if @transactions.all_successful_transactions.include?(invoice.id)
-          merchant_revenues_hash[@merchants.find_by_id(invoice.merchant_id)] += revenue_by_invoice_id(invoice.id)
+          merchant_revenues_hash[@merchants.find_by_id(invoice.merchant_id)] += invoice_total(invoice.id)
         end
       end
     end
