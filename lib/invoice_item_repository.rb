@@ -6,9 +6,10 @@ require 'time'
 
 class InvoiceItemRepository
 
-  attr_reader :filename, :invoice_items
-
   include Rowable
+
+  attr_reader :filename,
+              :invoice_items
 
   def initialize(filename)
     @filename = filename

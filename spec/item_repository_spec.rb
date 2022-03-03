@@ -13,7 +13,6 @@ RSpec.describe ItemRepository do
   end
 
   it 'can read #items' do
-
     expect(@item_repo.items).to be_a(Array)
   end
 
@@ -23,7 +22,6 @@ RSpec.describe ItemRepository do
 
   it '#rows' do
     expect(@item_repo.rows).to be_a(CSV::Table)
-
   end
 
   it 'can #find_by_id(id)' do
@@ -32,7 +30,6 @@ RSpec.describe ItemRepository do
   end
 
   it 'can #find_by_name(name)' do
-
     expect(@item_repo.find_by_name("Glitter scrabble frames")).to be_a(Item)
     expect(@item_repo.find_by_name("blah blah blah")).to eq(nil)
   end
@@ -60,7 +57,6 @@ RSpec.describe ItemRepository do
   end
 
   it 'can #create(attributes)' do
-
     item_4 = @item_repo.create({:id => '1',
                                 :name => "Pencil",
                                 :description => "You can use it to write things",
@@ -70,7 +66,6 @@ RSpec.describe ItemRepository do
                                 :merchant_id => 2})
     expect(item_4).to be_a(Item)
     expect(@item_repo.items[-1]).to eq(item_4)
-
   end
 
   it 'can #update(id, attributes)' do
@@ -85,7 +80,6 @@ RSpec.describe ItemRepository do
     expect(item_5.name).to eq('Eraser')
     expect(item_5.description).to eq("It erases things")
     expect(item_5.unit_price).to eq(BigDecimal(10.88,4))
-
   end
 
   it 'can #delete(id)' do
@@ -99,7 +93,4 @@ RSpec.describe ItemRepository do
     @item_repo.delete("263567475")
     expect(@item_repo.find_by_id("263567475")).to eq(nil)
   end
-
-
-
 end

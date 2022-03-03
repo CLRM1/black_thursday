@@ -6,10 +6,10 @@ require 'CSV'
 
 class CustomerRepository
 
+  include Rowable
+
   attr_reader :filename,
               :customers
-
-  include Rowable
 
   def initialize(filename)
     @filename = filename

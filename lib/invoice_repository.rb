@@ -9,9 +9,11 @@ require_relative '../lib/rowable'
 require 'CSV'
 
 class InvoiceRepository
-  attr_reader :filename, :invoices
 
   include Rowable
+
+  attr_reader :filename,
+              :invoices
 
   def initialize(filename)
     @filename = filename
@@ -87,7 +89,6 @@ class InvoiceRepository
         invoice.merchant_id
       end
     end.compact
-
   end
 
 end

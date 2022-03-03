@@ -89,20 +89,14 @@ RSpec.describe InvoiceRepository do
     @invoice_repo.delete(8)
     expect(@invoice_repo.find_by_id(8)).to eq(nil)
     @invoice_repo.delete(999999999)
-
   end
 
   it 'can find by created at(date)' do
     date = Time.parse("2009-02-07")
-    # expect(@invoice_repo.find_by_created_at(date).count).to eq(1)
     expect(@invoice_repo.find_by_created_at(date)).to be_a(Invoice)
-
   end
 
   it 'can give a list of merchant ids with pending invoices' do
     expect(@invoice_repo.all_pending_invoices.count).to eq(1473)
   end
-
-
-
 end

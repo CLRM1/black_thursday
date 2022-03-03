@@ -34,7 +34,6 @@ RSpec.describe Item do
     it 'converts unit price to dollars' do
       expect(i.unit_price_to_dollars).to eq(10.99)
     end
-
   end
 
 end

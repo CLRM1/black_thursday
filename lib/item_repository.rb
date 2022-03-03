@@ -4,9 +4,10 @@ require 'CSV'
 require 'time'
 
 class ItemRepository
-  attr_reader :filename, :items
 
   include Rowable
+
+  attr_reader :filename, :items
 
   def initialize(filename)
     @filename = filename

@@ -40,7 +40,6 @@ RSpec.describe CustomerRepository do
     end
   end
 
-
   describe '#find_by_id' do
     it 'can find a customer by its ID' do
       expect(@cr.find_by_id(1)).to be_a(Customer)
@@ -87,9 +86,7 @@ RSpec.describe CustomerRepository do
 
   describe '#delete' do
     it 'can delete a customer object given its id' do
-
       @cr.delete(1)
-
       expect(@cr.find_by_id(1)).to eq(nil)
     end
   end

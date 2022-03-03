@@ -7,9 +7,10 @@ require 'time'
 
 class TransactionRepository
 
-  attr_reader :filename, :transactions
-
   include Rowable
+
+  attr_reader :filename,
+              :transactions
 
   def initialize(filename)
     @filename = filename

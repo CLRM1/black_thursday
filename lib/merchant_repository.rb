@@ -6,9 +6,10 @@ require 'pry'
 
 class MerchantRepository
 
-  attr_reader :filename, :merchants
-
   include Rowable
+
+  attr_reader :filename,
+              :merchants
 
   def initialize(filename)
     @filename = filename
