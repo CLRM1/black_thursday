@@ -150,10 +150,6 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.total_revenue_by_date(time).class).to eq(BigDecimal)
     end
 
-    it 'can determine revenue by invoice id' do
-      expect(@sales_analyst.revenue_by_invoice_id(1)).to eq(21067.77)
-    end
-
     it 'can return an array of arrays of invoices collected by merchant id' do
       expect(@sales_analyst.invoices_by_merchant_id).to be_a(Array)
       expect(@sales_analyst.invoices_by_merchant_id[0]).to be_a(Array)
@@ -191,6 +187,10 @@ RSpec.describe SalesAnalyst do
       expect(@sales_analyst.merchants_with_only_one_item.first).to be_a(Merchant)
     end
 
+    it 'can determine merchants with one item by month' do
+      expect(@sales_analyst.merchants_with_only_one_item_registered_in_month("June").count).to eq(18)
+    end
+
     it 'can determine the total revenue for a single merchant' do
       expect(@sales_analyst.revenue_by_merchant(12334194)).to be_a(BigDecimal)
     end
@@ -204,7 +204,7 @@ RSpec.describe SalesAnalyst do
     end
 
     it 'can sort invoice items by revenue for some merchant' do
-      expect(@sales_analyst.invoice_items_by_revenue(12334194)).to be_a Hash 
+      expect(@sales_analyst.invoice_items_by_revenue(12334194)).to be_a Hash
     end
 
     it 'can determine the best selling item for a merchant in terms of revenue' do

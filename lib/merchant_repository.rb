@@ -1,19 +1,19 @@
 require_relative '../lib/merchant'
+require_relative '../lib/rowable'
 require 'CSV'
 require 'date'
 require 'pry'
 
 class MerchantRepository
 
-  attr_reader :filename, :merchants
+  include Rowable
+
+  attr_reader :filename,
+              :merchants
 
   def initialize(filename)
     @filename = filename
     @merchants = self.all
-  end
-
-  def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
   end
 
   def current_highest_id
@@ -53,10 +53,6 @@ class MerchantRepository
   def delete(id)
     deleted_merchant = find_by_id(id)
     @merchants.delete(deleted_merchant)
-  end
-
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end

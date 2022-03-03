@@ -30,7 +30,6 @@ RSpec.describe Transaction do
       expect(t.created_at).to be_a(Time)
       expect(t.updated_at).to be_a(Time)
     end
-
   end
 
 end

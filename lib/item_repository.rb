@@ -1,19 +1,18 @@
 require_relative '../lib/item'
+require_relative '../lib/rowable'
 require 'CSV'
 require 'time'
 
 class ItemRepository
+
+  include Rowable
+
   attr_reader :filename, :items
 
   def initialize(filename)
     @filename = filename
     @items = self.all
   end
-
-  def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
-  end
-
 
   def all
     result = rows.map {|row| Item.new(row)}
@@ -89,12 +88,8 @@ class ItemRepository
   end
 
   def delete(id)
-
     deleted_item = @items.find {|item| item.id == id }
     @items.delete(deleted_item)
   end
 
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
-  end
 end

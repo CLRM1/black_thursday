@@ -45,8 +45,4 @@ RSpec.describe Invoice do
   it 'can read #customer_id' do
     expect(@i.updated_at).to be_a(Time)
   end
-
-
-
-
 end

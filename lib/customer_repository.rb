@@ -1,9 +1,12 @@
 require_relative '../lib/customer'
+require_relative '../lib/rowable'
 require 'pry'
 require 'time'
 require 'CSV'
 
 class CustomerRepository
+
+  include Rowable
 
   attr_reader :filename,
               :customers
@@ -12,11 +15,6 @@ class CustomerRepository
     @filename = filename
     @customers = self.all
   end
-
-  def rows
-    CSV.read(@filename, headers: true, header_converters: :symbol)
-  end
-
 
   def all
     rows.map {|row| Customer.new(row)}
@@ -58,10 +56,6 @@ class CustomerRepository
 
   def delete(id)
     @customers.delete(find_by_id(id))
-  end
-
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end

@@ -200,12 +200,6 @@ class SalesAnalyst
     end.sum
   end
 
-  def revenue_by_invoice_id(invoice_id)
-    @invoice_items.find_all_by_invoice_id(invoice_id).map do |invoice_item|
-      (invoice_item.unit_price * invoice_item.quantity)
-    end.sum
-  end
-
   def invoices_by_merchant_id
     merchant_ids = @merchants.merchants.map {|merchant| merchant.id}
     merchant_ids.map do |merchant_id|
@@ -218,7 +212,7 @@ class SalesAnalyst
     invoices_by_merchant_id.each do |merchant_invoices|
       merchant_invoices.each do |invoice|
         if @transactions.all_successful_transactions.include?(invoice.id)
-          merchant_revenues_hash[@merchants.find_by_id(invoice.merchant_id)] += revenue_by_invoice_id(invoice.id)
+          merchant_revenues_hash[@merchants.find_by_id(invoice.merchant_id)] += invoice_total(invoice.id)
         end
       end
     end
@@ -246,22 +240,12 @@ class SalesAnalyst
   end
 
   def merchants_with_only_one_item_registered_in_month(month)
-    month_number = Time.parse(month).month
-    month_merchants = @merchants.merchants.find_all do |merchant|
-      merchant.created_at.month == month_number
-    end
-    month_merchant_items = Hash.new(0)
-    month_merchants.each do |merchant|
-      month_merchant_items[merchant] =
-      @invoices.find_all_by_merchant_id(merchant.id).map do |invoice|
-        if invoice.created_at.month == month_number
-          @invoice_items.invoice_items.find_all do |invoice_item|
-            invoice_item.invoice_id == invoice.id
-          end.count
-        end
-      end.compact.sum
-    end
-    month_merchant_items.find_all {|merchant, item_count| item_count == 1}.flatten
+    month_index = Time.parse(month).month
+    one_item_merchants = {}
+    merchants_with_only_one_item.each {|merchant|
+      one_item_merchants[merchant] = merchant.created_at.month}
+    one_item_merchants.map {|merchant, created_at|
+      merchant if created_at == month_index}.compact
   end
 
   def merchant_items

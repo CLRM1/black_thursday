@@ -5,18 +5,19 @@ require_relative '../lib/item_repository'
 require_relative '../lib/sales_engine'
 require_relative '../lib/sales_analyst'
 require_relative '../lib/invoice'
+require_relative '../lib/rowable'
 require 'CSV'
 
 class InvoiceRepository
-  attr_reader :filename, :invoices
+
+  include Rowable
+
+  attr_reader :filename,
+              :invoices
 
   def initialize(filename)
     @filename = filename
     @invoices = self.all
-  end
-
-  def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
   end
 
   def all
@@ -87,12 +88,7 @@ class InvoiceRepository
       if invoice.status == :pending
         invoice.merchant_id
       end
-    end.compact    
-
-  end
-
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
+    end.compact
   end
 
 end
