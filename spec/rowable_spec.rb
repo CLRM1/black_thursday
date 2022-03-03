@@ -7,7 +7,7 @@ RSpec.describe Rowable do
   describe "Iteration 1" do
     it "can read atttributes" do
       @merchant_repo = MerchantRepository.new('./data/mini_merchants.csv')
-      expect(@merchant_repo.filename).to eq('./data/mini_merchants.csv')
+      expect(@merchant_repo.rows).to be_a(CSV::Table)
     end
   end
 end
