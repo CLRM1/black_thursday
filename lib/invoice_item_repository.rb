@@ -8,13 +8,11 @@ class InvoiceItemRepository
 
   attr_reader :filename, :invoice_items
 
+  include Rowable
+
   def initialize(filename)
     @filename = filename
     @invoice_items = self.all
-  end
-
-  def rows
-    rows = CSV.read(@filename, headers: true, header_converters: :symbol)
   end
 
   def all
@@ -56,10 +54,6 @@ class InvoiceItemRepository
   def delete(id)
     deleted_invoice = find_by_id(id)
     @invoice_items.delete(deleted_invoice)
-  end
-
-  def inspect
-   "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end

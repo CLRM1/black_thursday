@@ -248,12 +248,10 @@ class SalesAnalyst
   def merchants_with_only_one_item_registered_in_month(month)
     month_index = Time.parse(month).month
     one_item_merchants = {}
-    merchants_with_only_one_item.each do |merchant|
-      one_item_merchants[merchant] = merchant.created_at.month
-    end
-    one_item_merchants.map do |merchant, created_at|
-      merchant if created_at == month_index
-    end.compact
+    merchants_with_only_one_item.each {|merchant|
+      one_item_merchants[merchant] = merchant.created_at.month}
+    one_item_merchants.map {|merchant, created_at|
+      merchant if created_at == month_index}.compact
   end
 
   def merchant_items
