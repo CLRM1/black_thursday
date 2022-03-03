@@ -7,6 +7,10 @@ Welcome to the README for the infamous BLACK THURSDAY project. The contributors 
 - Chris `The Driver` Romero
 - James `BigDecimal Energy` Harkins
 
+## Project Description:
+
+This project creates robust, dynamic, innovative tools for complex business analysis and provides a foundation for an e-commerce engine. 
+
 ## Notes on the `most_sold_item_for_merchant` and `best_item_for_merchant` Methods
 
 The two methods #most_sold_item_for_merchant and #best_item_for_merchant in the sales analyst class are two of the most innovative, complex and industry breaking methods ever written by a group of mod1 students. Check out our Blog Post below:
